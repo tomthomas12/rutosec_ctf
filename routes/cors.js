@@ -2,6 +2,11 @@ const express = require('express');
 const { query, get } = require('../db/database');
 const router = express.Router();
 
+// ── CORS INFO PAGE ──
+router.get('/', (req, res) => {
+  res.render('cors_info', { user: req.session.user });
+});
+
 // ── MISCONFIGURED CORS ──
 // INTENTIONALLY VULNERABLE: Allow * origin on sensitive data endpoint
 router.get('/api/users', (req, res) => {
