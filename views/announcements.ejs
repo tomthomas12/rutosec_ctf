@@ -1,0 +1,41 @@
+<%- include('layout', { title: 'Announcements', path: '/announcements', user, body: `
+<div class="page-header">
+  <h1>Announcements</h1>
+  <p>Platform updates and news from the Rutosec team.</p>
+</div>
+<div class="page">
+  <main>
+    ${user && user.role === 'admin' ? `
+    <div class="card" style="margin-bottom:2rem;">
+      <h4 style="font-family:var(--mono);font-size:.8rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.75rem;">// Post Announcement</h4>
+      <form method="POST" action="/announcements">
+        <div class="form-row"><textarea name="body" style="min-height:100px;" placeholder="Write an announcement… (HTML supported)"></textarea></div>
+        <button class="btn btn-primary" type="submit">Publish</button>
+      </form>
+    </div>` : ''}
+
+    ${announcements.length === 0
+      ? `<p style="color:var(--text-dim);font-family:var(--mono);font-size:.85rem;">No announcements yet.</p>`
+      : announcements.map(a => `
+        <div class="announcement-banner">
+          <div class="ann-meta">📢 by ${a.author} · ${new Date(a.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}</div>
+          <!-- INTENTIONALLY VULNERABLE: body rendered as raw HTML (Site Defacement / Stored XSS) -->
+          <div class="ann-body">${a.body}</div>
+        </div>`).join('')}
+  </main>
+  <aside>
+    <div class="sidebar-card">
+      <h4>// Labs</h4>
+      <a class="sidebar-link" href="/labs/link-injection">Link Injection</a>
+      <a class="sidebar-link" href="/labs/iframe-injection">iFrame Injection</a>
+      <a class="sidebar-link" href="/announcements">Site Defacement</a>
+      <a class="sidebar-link" href="/posts">Stored XSS</a>
+    </div>
+    <div class="sidebar-card">
+      <h4>// CTF</h4>
+      <a class="sidebar-link" href="/flags">Submit Flag</a>
+      <a class="sidebar-link" href="/scoreboard">Scoreboard</a>
+    </div>
+  </aside>
+</div>
+` }) %>

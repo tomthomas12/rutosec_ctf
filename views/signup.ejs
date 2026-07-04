@@ -1,0 +1,14 @@
+<%- include('layout', { title: 'Sign Up', path: '/signup', user: null, body: `
+<div class="form-wrap">
+  <h2>Create account</h2>
+  <p class="sub">Join Rutosec and start the CTF</p>
+  ${error ? `<div class="alert alert-error">${error}</div>` : ''}
+  <form method="POST" action="/signup">
+    <div class="form-row"><label>Username</label><input name="username" required/></div>
+    <div class="form-row"><label>Email</label><input type="email" name="email" required/></div>
+    <div class="form-row"><label>Password</label><input type="password" name="password" required/></div>
+    <button class="btn btn-primary btn-full" type="submit">Create Account</button>
+  </form>
+  <p class="form-link">Already have an account? <a href="/login">Sign in</a></p>
+</div>
+` }) %>

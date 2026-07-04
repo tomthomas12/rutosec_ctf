@@ -1,0 +1,29 @@
+<%- include('layout', { title: 'Edit Profile', path: '/profile', user, body: `
+<div class="page full">
+  <main style="max-width:520px;margin:0 auto;">
+    <div class="form-wrap" style="max-width:100%;">
+      <h2>Edit Profile</h2>
+      <p class="sub">Update your public profile information.</p>
+      ${error ? `<div class="alert alert-error">${error}</div>` : ''}
+      <form method="POST" action="/profile/${profile.username}/edit">
+        <div class="form-row">
+          <label>Email</label>
+          <input type="email" name="email" value="${profile.email || ''}" required/>
+        </div>
+        <div class="form-row">
+          <label>Bio</label>
+          <textarea name="bio" placeholder="Tell the community about yourself…">${profile.bio || ''}</textarea>
+        </div>
+        <div class="form-row">
+          <label>Website</label>
+          <input name="website" placeholder="https://your-site.com" value="${profile.website || ''}"/>
+        </div>
+        <div style="display:flex;gap:.75rem;">
+          <button class="btn btn-primary" type="submit">Save Changes</button>
+          <a class="btn btn-sm" href="/profile/${profile.username}">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </main>
+</div>
+` }) %>

@@ -1,0 +1,73 @@
+<%- include('layout', { title: 'CSRF — AJAX Attack', path: '/csrf', user, body: `
+<div class="page-header">
+  <h1>Public Messaging Service</h1>
+  <p>Post messages via AJAX — no CSRF protection on the endpoint.</p>
+</div>
+<div class="page">
+  <main>
+    ${user ? `
+    <div class="card" style="margin-bottom:2rem;">
+      <h4 style="font-family:var(--mono);font-size:.8rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.75rem;">// Post Message</h4>
+      <div class="form-row">
+        <label>Message</label>
+        <textarea id="message-input" placeholder="Type a message…" style="min-height:80px;"></textarea>
+      </div>
+      <button class="btn btn-primary" onclick="postMessageViaAjax()">Post via AJAX</button>
+    </div>` : `<div class="alert alert-error" style="margin-bottom:1.5rem;"><a href="/login" style="color:var(--accent2);">Sign in</a> to post messages.</div>`}
+
+    <div class="card">
+      <h3 style="font-family:var(--serif);font-size:1.1rem;margin-bottom:1rem;">Message Feed</h3>
+      <div id="messages-feed">
+        ${messages.length === 0
+          ? `<p style="color:var(--text-dim);font-family:var(--mono);font-size:.85rem;">No messages yet.</p>`
+          : messages.map(m => `
+            <div style="padding:1rem;border-bottom:1px solid var(--border);font-size:.88rem;">
+              <div style="font-family:var(--mono);color:var(--accent);margin-bottom:.25rem;">${m.sender}</div>
+              <div style="color:var(--text);margin-bottom:.5rem;">${m.content}</div>
+              <div style="font-size:.75rem;color:var(--text-dim);">${new Date(m.created_at).toLocaleString()}</div>
+            </div>`).join('')}
+      </div>
+    </div>
+  </main>
+  <aside>
+    <div class="sidebar-card">
+      <h4>// About this CSRF</h4>
+      <p style="font-size:.82rem;color:var(--text-dim);">The AJAX endpoint accepts JSON POST requests with credentials from any origin. No CSRF token verification.</p>
+    </div>
+    <div class="sidebar-card">
+      <h4>// CSRF Labs</h4>
+      <a class="sidebar-link" href="/csrf/simple-form">Simple Form</a>
+      <a class="sidebar-link" href="/csrf/ajax-endpoint">AJAX Endpoint</a>
+      <a class="sidebar-link" href="/csrf/password-change">Password Change</a>
+    </div>
+    <div class="sidebar-card">
+      <h4>// CTF</h4>
+      <a class="sidebar-link" href="/flags">Submit Flag</a>
+      <a class="sidebar-link" href="/scoreboard">Scoreboard</a>
+    </div>
+  </aside>
+</div>
+
+<script>
+function postMessageViaAjax() {
+  const input = document.getElementById('message-input');
+  const msg = input.value.trim();
+  if (!msg) { alert('Message required'); return; }
+  
+  fetch('/csrf/ajax-endpoint', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({ message: msg })
+  })
+  .then(r => r.json())
+  .then(d => {
+    if (d.success) {
+      input.value = '';
+      location.reload();
+    }
+  })
+  .catch(e => console.error(e));
+}
+</script>
+` }) %>

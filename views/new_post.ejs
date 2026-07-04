@@ -1,0 +1,19 @@
+<%- include('layout', { title: 'Write', path: '/posts', user, body: `
+<div class="page full">
+  <main style="max-width:720px;margin:0 auto;">
+    <h2 style="font-family:var(--serif);font-size:1.8rem;color:var(--text-head);margin-bottom:1.5rem;">New Article</h2>
+    ${error ? `<div class="alert alert-error">${error}</div>` : ''}
+    <div class="card">
+      <form method="POST" action="/posts">
+        <div class="form-row"><label>Title</label><input name="title" placeholder="Article title…" required/></div>
+        <div class="form-row"><label>Body (HTML supported)</label><textarea name="body" style="min-height:260px;" placeholder="Write your article…" required></textarea></div>
+        <div class="form-row"><label>Embed (optional — paste an iframe or media snippet)</label><textarea name="embed" style="min-height:80px;" placeholder="<iframe src=...></iframe>"></textarea></div>
+        <div style="display:flex;gap:.75rem;">
+          <button class="btn btn-primary" type="submit">Publish</button>
+          <a class="btn btn-sm" href="/posts">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </main>
+</div>
+` }) %>

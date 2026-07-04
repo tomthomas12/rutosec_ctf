@@ -1,0 +1,35 @@
+<%- include('layout', { title: 'Scoreboard', path: '/scoreboard', user, body: `
+<div class="page-header">
+  <h1>Scoreboard</h1>
+  <p>Live rankings across all CTF challenges.</p>
+</div>
+<div class="page full">
+  <main style="max-width:700px;margin:0 auto;">
+    <div class="card" style="padding:0;overflow:hidden;">
+      <table class="score-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Player</th>
+            <th>Challenges Solved</th>
+            <th>Points</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${scores.length === 0 ? `<tr><td colspan="4" style="text-align:center;color:var(--text-dim);padding:2rem;">No scores yet. Be the first to submit a flag!</td></tr>` :
+            scores.map((s, i) => `
+            <tr>
+              <td class="rank ${i===0?'gold':i===1?'silver':i===2?'bronze':''}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</td>
+              <td style="font-weight:600;color:var(--text-head);">${s.username}</td>
+              <td class="solved">${s.solved} / 5</td>
+              <td class="pts">${s.points} pts</td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:1.5rem;font-family:var(--mono);font-size:.78rem;color:var(--text-dim);text-align:center;">
+      Points: Reflected XSS (100) · Stored XSS (150) · DOM XSS (100) · Info Disclosure × 2 (75 each)
+    </div>
+  </main>
+</div>
+` }) %>

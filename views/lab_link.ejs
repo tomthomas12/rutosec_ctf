@@ -1,0 +1,47 @@
+<%- include('layout', { title: 'Link Injection Lab', path: '/labs', user, body: `
+<div class="page-header">
+  <h1>Community Resources</h1>
+  <p>Share useful security research links with the Rutosec community.</p>
+</div>
+<div class="page">
+  <main>
+    ${user ? `
+    <div class="card" style="margin-bottom:2rem;">
+      <h4 style="font-family:var(--mono);font-size:.8rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.75rem;">// Submit a Resource</h4>
+      <form method="POST" action="/labs/link-injection">
+        <div class="form-row"><label>Label</label><input name="label" placeholder="OWASP XSS Prevention Cheat Sheet" required/></div>
+        <div class="form-row"><label>URL</label><input name="url" placeholder="https://…" required/></div>
+        <button class="btn btn-primary" type="submit">Add Resource</button>
+      </form>
+    </div>` : `<div class="alert alert-error" style="margin-bottom:1.5rem;"><a href="/login" style="color:var(--accent2);">Sign in</a> to submit resources.</div>`}
+
+    ${links.length === 0
+      ? `<p style="color:var(--text-dim);font-family:var(--mono);font-size:.85rem;">No resources submitted yet.</p>`
+      : links.map(l => `
+        <div class="card">
+          <div class="article-meta">
+            <span class="cat">Resource</span>
+            <span>by ${l.author}</span>
+            <span>· ${new Date(l.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}</span>
+          </div>
+          <p style="color:var(--text-head);font-size:.95rem;margin-bottom:.5rem;">${l.label}</p>
+          <!-- INTENTIONALLY VULNERABLE: url injected into href without sanitisation (Link Injection) -->
+          <a href="${l.url}" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:.82rem;color:var(--accent2);word-break:break-all;">${l.url}</a>
+        </div>`).join('')}
+  </main>
+  <aside>
+    <div class="sidebar-card">
+      <h4>// Labs</h4>
+      <a class="sidebar-link" href="/labs/link-injection">Link Injection</a>
+      <a class="sidebar-link" href="/labs/iframe-injection">iFrame Injection</a>
+      <a class="sidebar-link" href="/announcements">Site Defacement</a>
+      <a class="sidebar-link" href="/posts">Stored XSS</a>
+    </div>
+    <div class="sidebar-card">
+      <h4>// CTF</h4>
+      <a class="sidebar-link" href="/flags">Submit Flag</a>
+      <a class="sidebar-link" href="/scoreboard">Scoreboard</a>
+    </div>
+  </aside>
+</div>
+` }) %>

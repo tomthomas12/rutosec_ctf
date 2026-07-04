@@ -1,0 +1,52 @@
+<%- include('layout', { title: 'Home', path: '/', user, body: `
+<div class="hero">
+  <div class="hero-eyebrow">⬡ Security Research &amp; CTF Challenges</div>
+  <h1>Real-world <em>Web Vulnerabilities</em>, Dissected.</h1>
+  <p class="hero-sub">Deep-dives into offensive web security, exploitation techniques, and responsible disclosure from the Rutosec team.</p>
+  <div class="search-wrap">
+    <span class="search-icon">⌕</span>
+    <input type="text" id="dom-search" placeholder="Search articles…" autocomplete="off"/>
+  </div>
+  <div class="search-results" id="dom-result"></div>
+</div>
+
+<div class="page">
+  <main>
+    ${reflected ? `<div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.6rem 1rem;margin-bottom:1.25rem;font-family:var(--mono);font-size:.78rem;color:var(--text-dim);">rutosec.blog/search?query=<span style="color:var(--accent2)">${encodedQ}</span></div><div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.75rem 1rem;margin-bottom:1.5rem;">${reflectedOutput}</div>` : ''}
+    ${posts.map(p => `
+    <article class="card">
+      <div class="article-meta">
+        <span class="cat">Web Security</span>
+        <span>${new Date(p.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}</span>
+        <span>· by ${p.author}</span>
+      </div>
+      <h2>${p.title}</h2>
+      <p class="excerpt">${p.excerpt}</p>
+      <a class="read-more" href="/posts/${p.id}">Read article →</a>
+    </article>`).join('')}
+  </main>
+  <aside>
+    <div class="sidebar-card">
+      <h4>// Quick Search</h4>
+      <form method="GET" action="/search" style="display:flex;gap:.5rem;">
+        <input name="query" placeholder="keyword…" style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:var(--mono);font-size:.8rem;padding:.45rem .7rem;outline:none;"/>
+        <button class="btn btn-primary" style="padding:.45rem .85rem;">→</button>
+      </form>
+    </div>
+    <div class="sidebar-card">
+      <h4>// Recent Posts</h4>
+      ${posts.map(p=>`<a class="sidebar-link" href="/posts/${p.id}">${p.title}</a>`).join('')}
+    </div>
+    <div class="sidebar-card">
+      <h4>// About Rutosec</h4>
+      <p style="font-size:.82rem;color:var(--text-dim);">Offensive security research &amp; bootcamp training for web, API, and AI pentesting. Founded by Tom &amp; Ruben.</p>
+    </div>
+    <div class="sidebar-card">
+      <h4>// Tags</h4>
+      <div style="display:flex;flex-wrap:wrap;gap:.4rem;">
+        <span class="tag">XSS</span><span class="tag">OAuth</span><span class="tag">OWASP</span><span class="tag">API</span><span class="tag">Recon</span><span class="tag">Cloud</span>
+      </div>
+    </div>
+  </aside>
+</div>
+` }) %>

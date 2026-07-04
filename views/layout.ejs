@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title><%= title %> — Rutosec CTF Blog</title>
+  <link rel="stylesheet" href="/css/style.css"/>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <a class="logo" href="/" data-text="// rutosec.blog">// rutosec.blog</a>
+    <nav>
+      <a href="/" class="<%= path==='/' ? 'active' : '' %>">Home</a>
+      <a href="/posts" class="<%= path==='/posts' ? 'active' : '' %>">Articles</a>
+      <a href="/announcements" class="<%= path==='/announcements' ? 'active' : '' %>">Announcements</a>
+      <div class="nav-dropdown">
+        <a class="<%= path==='/labs' ? 'active' : '' %>">Labs ▾</a>
+        <div class="dropdown-menu">
+          <a href="/labs/link-injection">Link Injection</a>
+          <a href="/labs/iframe-injection">iFrame Injection</a>
+          <a href="/csrf/simple-form">CSRF — Simple Form</a>
+          <a href="/csrf/ajax-endpoint">CSRF — AJAX</a>
+          <a href="/csrf/password-change">CSRF — Beginner</a>
+          <a href="/cors">CORS & Formula Injection</a>
+        </div>
+      </div>
+      <a href="/scoreboard" class="<%= path==='/scoreboard' ? 'active' : '' %>">Scoreboard</a>
+      <a href="/flags" class="<%= path==='/flags' ? 'active' : '' %>">Submit Flag</a>
+      <% if (user) { %>
+        <a href="/profile/<%= user.username %>">Profile</a>
+        <a href="/logout" class="nav-btn">Logout</a>
+      <% } else { %>
+        <a href="/login" class="nav-btn">Login</a>
+        <a href="/signup" class="nav-btn solid">Sign Up</a>
+      <% } %>
+    </nav>
+  </div>
+</header>
+<%- body %>
+<footer>
+  <span>rutosec.blog</span> &nbsp;·&nbsp; CTF Training Platform by Tom &amp; Ruben
+</footer>
+<div id="toast-box"></div>
+<script src="/js/main.js"></script>
+</body>
+</html>

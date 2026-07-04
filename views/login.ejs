@@ -1,0 +1,13 @@
+<%- include('layout', { title: 'Login', path: '/login', user: null, body: `
+<div class="form-wrap">
+  <h2>Welcome back</h2>
+  <p class="sub">Sign in to your Rutosec account</p>
+  ${error ? `<div class="alert alert-error">${error}</div>` : ''}
+  <form method="POST" action="/login">
+    <div class="form-row"><label>Username</label><input name="username" autocomplete="username" required/></div>
+    <div class="form-row"><label>Password</label><input type="password" name="password" autocomplete="current-password" required/></div>
+    <button class="btn btn-primary btn-full" type="submit">Sign In</button>
+  </form>
+  <p class="form-link">No account? <a href="/signup">Create one</a></p>
+</div>
+` }) %>

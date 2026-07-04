@@ -1,0 +1,55 @@
+<%- include('layout', { title: 'CSRF — Simple Form', path: '/csrf', user, body: `
+<div class="page-header">
+  <h1>Money Transfer Service</h1>
+  <p>Send credits to other users — no authentication required beyond login.</p>
+</div>
+<div class="page">
+  <main>
+    ${user ? `
+    <div class="card" style="margin-bottom:2rem;">
+      <h4 style="font-family:var(--mono);font-size:.8rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.75rem;">// Send Credits</h4>
+      <form method="POST" action="/csrf/simple-form">
+        <div class="form-row">
+          <label>Recipient Username</label>
+          <input name="to_user" placeholder="alice" required/>
+        </div>
+        <div class="form-row">
+          <label>Amount</label>
+          <input name="amount" type="number" placeholder="100" required/>
+        </div>
+        <button class="btn btn-primary" type="submit">Send Transfer</button>
+      </form>
+    </div>` : `<div class="alert alert-error" style="margin-bottom:1.5rem;"><a href="/login" style="color:var(--accent2);">Sign in</a> to use the transfer service.</div>`}
+
+    <div class="card">
+      <h3 style="font-family:var(--serif);font-size:1.1rem;margin-bottom:1rem;">Recent Transfers</h3>
+      ${transfers.length === 0
+        ? `<p style="color:var(--text-dim);font-family:var(--mono);font-size:.85rem;">No transfers yet.</p>`
+        : transfers.map(t => `
+          <div style="padding:.75rem;border-bottom:1px solid var(--border);font-size:.88rem;">
+            <div style="font-family:var(--mono);color:var(--text-dim);">
+              ${t.from_user} → ${t.to_user} &nbsp; <span style="color:var(--accent);">+${t.amount} credits</span>
+            </div>
+            <div style="font-size:.75rem;color:var(--text-dim);">${new Date(t.created_at).toLocaleString()}</div>
+          </div>`).join('')}
+    </div>
+  </main>
+  <aside>
+    <div class="sidebar-card">
+      <h4>// About CSRF</h4>
+      <p style="font-size:.82rem;color:var(--text-dim);">This form has no CSRF protection. Any cross-origin POST request will be accepted if the user is logged in.</p>
+    </div>
+    <div class="sidebar-card">
+      <h4>// CSRF Labs</h4>
+      <a class="sidebar-link" href="/csrf/simple-form">Simple Form</a>
+      <a class="sidebar-link" href="/csrf/ajax-endpoint">AJAX Endpoint</a>
+      <a class="sidebar-link" href="/csrf/password-change">Password Change</a>
+    </div>
+    <div class="sidebar-card">
+      <h4>// CTF</h4>
+      <a class="sidebar-link" href="/flags">Submit Flag</a>
+      <a class="sidebar-link" href="/scoreboard">Scoreboard</a>
+    </div>
+  </aside>
+</div>
+` }) %>

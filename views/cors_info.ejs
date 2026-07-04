@@ -1,0 +1,52 @@
+<%- include('layout', { title: 'CORS & Formula Injection', path: '/cors', user, body: `
+<div class="page-header">
+  <h1>Misconfigured CORS & Formula Injection</h1>
+  <p>Sensitive data endpoint with overly permissive CORS headers, and CSV download vulnerable to spreadsheet formula injection.</p>
+</div>
+<div class="page">
+  <main>
+    <div class="card">
+      <h3 style="font-family:var(--serif);font-size:1.1rem;margin-bottom:1rem;">API Endpoint: /api/users</h3>
+      <p style="color:var(--text-dim);font-size:.88rem;margin-bottom:1rem;">Returns all users in JSON format. Accessible via CORS from any origin.</p>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.75rem;margin-bottom:1rem;">
+        <p style="font-family:var(--mono);font-size:.8rem;color:var(--accent2);margin:0;">
+          GET /cors/api/users
+        </p>
+        <p style="font-family:var(--mono);font-size:.8rem;color:var(--text-dim);margin:.25rem 0 0;"><i>Returns: JSON array of users with email, bio, website</i></p>
+      </div>
+      <p style="color:var(--text);font-size:.88rem;">Any JavaScript from any origin can fetch this endpoint due to the misconfigured CORS header:</p>
+      <code style="display:block;font-family:var(--mono);font-size:.8rem;background:var(--surface);padding:.5rem;border-radius:4px;margin:1rem 0;">Access-Control-Allow-Origin: *</code>
+    </div>
+
+    <div class="card">
+      <h3 style="font-family:var(--serif);font-size:1.1rem;margin-bottom:1rem;">CSV Download: /export-users.csv</h3>
+      <p style="color:var(--text-dim);font-size:.88rem;margin-bottom:1rem;">Download user data as CSV. User input fields (email, website, bio) are not sanitised for formula injection.</p>
+      <div style="margin-bottom:1rem;">
+        <a class="btn btn-primary" href="/cors/export-users.csv">Download CSV</a>
+        <span style="font-family:var(--mono);font-size:.75rem;color:var(--text-dim);margin-left:.5rem;">Right-click → Save As</span>
+      </div>
+      <p style="color:var(--text);font-size:.88rem;">Open the CSV in Excel or Google Sheets. If any user's email field starts with <code style="background:var(--surface);padding:.2rem .4rem;">=</code>, <code style="background:var(--surface);padding:.2rem .4rem;">@</code>, <code style="background:var(--surface);padding:.2rem .4rem;">+</code>, or <code style="background:var(--surface);padding:.2rem .4rem;">-</code>, the spreadsheet app will attempt to execute it as a formula.</p>
+    </div>
+
+    <div class="card">
+      <h3 style="font-family:var(--serif);font-size:1.1rem;margin-bottom:1rem;">Lab Instructions</h3>
+      <p style="color:var(--text);font-size:.88rem;margin-bottom:1rem;"><strong>CORS Challenge:</strong> Write JavaScript that fetches /cors/api/users from a different origin and logs the user data to the console.</p>
+      <p style="color:var(--text);font-size:.88rem;margin-bottom:1rem;"><strong>Formula Injection Challenge:</strong> Edit your profile and set your email to a formula payload like <code style="background:var(--surface);padding:.2rem .4rem;">=1+1</code>. Download the CSV and open it in Excel — the formula will be evaluated.</p>
+    </div>
+  </main>
+  <aside>
+    <div class="sidebar-card">
+      <h4>// CORS Resources</h4>
+      <a class="sidebar-link" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS" target="_blank">MDN CORS Docs</a>
+      <a class="sidebar-link" href="https://portswigger.net/web-security/cors" target="_blank">PortSwigger CORS</a>
+    </div>
+    <div class="sidebar-card">
+      <h4>// More Labs</h4>
+      <a class="sidebar-link" href="/csrf/simple-form">CSRF Simple Form</a>
+      <a class="sidebar-link" href="/csrf/ajax-endpoint">CSRF AJAX</a>
+      <a class="sidebar-link" href="/csrf/password-change">CSRF Beginner</a>
+      <a class="sidebar-link" href="/flags">Submit Flag</a>
+    </div>
+  </aside>
+</div>
+` }) %>

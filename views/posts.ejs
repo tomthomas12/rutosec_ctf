@@ -1,0 +1,28 @@
+<%- include('layout', { title: 'Articles', path: '/posts', user, body: `
+<div class="page-header">
+  <h1>Articles</h1>
+  <p>Security research, exploitation write-ups, and tooling guides.</p>
+</div>
+<div class="page">
+  <main>
+    ${user ? `<div style="margin-bottom:1.5rem;"><a class="btn btn-primary" href="/posts/new">+ New Post</a></div>` : ''}
+    ${posts.map(p => `
+    <article class="card">
+      <div class="article-meta">
+        <span class="cat">Web Security</span>
+        <span>${new Date(p.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}</span>
+        <span>· by ${p.author}</span>
+      </div>
+      <h2>${p.title}</h2>
+      <p class="excerpt">${p.excerpt}</p>
+      <a class="read-more" href="/posts/${p.id}">Read article →</a>
+    </article>`).join('')}
+  </main>
+  <aside>
+    <div class="sidebar-card">
+      <h4>// About Rutosec</h4>
+      <p style="font-size:.82rem;color:var(--text-dim);">Offensive security research & bootcamp training for web, API, and AI pentesting.</p>
+    </div>
+  </aside>
+</div>
+` }) %>

@@ -1,0 +1,59 @@
+<%- include('layout', { title: post.title, path: '/posts', user, body: `
+<div class="page">
+  <main>
+    <div class="post-header">
+      <div class="article-meta">
+        <span class="cat">Web Security</span>
+        <span>${new Date(post.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}</span>
+        <span>· by <a href="/profile/${post.author}" style="color:var(--accent2);text-decoration:none;">${post.author}</a></span>
+      </div>
+      <h1>${post.title}</h1>
+    </div>
+    <div class="post-body">${post.body}</div>
+    ${post.embed ? `
+    <div style="margin:1.5rem 0;">
+      <div style="font-family:var(--mono);font-size:.72rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.5rem;">// Embedded Content</div>
+      <!-- INTENTIONALLY VULNERABLE: embed rendered as raw HTML (iFrame Injection) -->
+      <div class="embed-container">${post.embed}</div>
+    </div>` : ''}
+    <hr class="divider"/>
+    <div class="comments-section">
+      <h3>Comments (${comments.length})</h3>
+      <div id="comments-list">
+        ${comments.map(c => `
+        <div class="comment">
+          <div class="comment-author">
+            <a href="/profile/${c.author}" style="color:var(--accent);text-decoration:none;">${c.author}</a>
+            <span>· ${new Date(c.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}</span>
+          </div>
+          <!-- INTENTIONALLY VULNERABLE: body rendered as raw HTML (Stored XSS) -->
+          <div class="comment-body">${c.body}</div>
+        </div>`).join('')}
+      </div>
+      ${user ? `
+      <div style="margin-top:1.5rem;">
+        <h4 style="font-family:var(--mono);font-size:.8rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.75rem;">// Post a Comment</h4>
+        <form method="POST" action="/posts/${post.id}/comment">
+          <div class="form-row"><textarea name="body" placeholder="Share your thoughts…"></textarea></div>
+          <button class="btn btn-primary" type="submit">Post Comment</button>
+        </form>
+      </div>` : `<p style="font-family:var(--mono);font-size:.82rem;color:var(--text-dim);margin-top:1rem;"><a href="/login" style="color:var(--accent2);">Sign in</a> to leave a comment.</p>`}
+    </div>
+    <hr class="divider"/>
+    <a class="btn btn-sm" href="/posts">← Back to articles</a>
+  </main>
+  <aside>
+    <div class="sidebar-card">
+      <h4>// Author</h4>
+      <a href="/profile/${post.author}" style="font-family:var(--mono);font-size:.85rem;color:var(--accent);text-decoration:none;">${post.author}</a>
+      <p style="font-size:.82rem;color:var(--text-dim);margin-top:.35rem;">Rutosec research team</p>
+    </div>
+    <div class="sidebar-card">
+      <h4>// Tags</h4>
+      <div style="display:flex;flex-wrap:wrap;gap:.4rem;">
+        <span class="tag">XSS</span><span class="tag">OWASP</span><span class="tag">Web Security</span>
+      </div>
+    </div>
+  </aside>
+</div>
+` }) %>

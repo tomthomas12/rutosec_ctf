@@ -1,0 +1,46 @@
+<%- include('layout', { title: 'Submit Flag', path: '/flags', user, body: `
+<div class="page-header">
+  <h1>Submit Flags</h1>
+  <p>Found a vulnerability? Submit the flag to claim your points.</p>
+</div>
+<div class="page full">
+  <main style="max-width:960px;margin:0 auto;">
+    ${!user ? `<div class="alert alert-error" style="max-width:500px;margin:2rem auto;text-align:center;">You must <a href="/login" style="color:var(--accent2);">sign in</a> to submit flags.</div>` : `
+    ${msg ? `<div class="alert ${msgType === 'success' ? 'alert-success' : 'alert-error'}">${msg}</div>` : ''}
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;margin-bottom:2rem;">
+      ${challenges.map(c => `
+      <div class="challenge-card ${c.solved ? 'solved' : ''}">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.35rem;">
+          <h3 style="font-family:var(--mono);font-size:.85rem;color:${c.solved ? 'var(--accent)' : 'var(--text-head)'};">${c.name}</h3>
+          <span style="font-family:var(--mono);font-size:.72rem;color:var(--accent2);white-space:nowrap;margin-left:.5rem;">+${c.points} pts</span>
+        </div>
+        <p style="font-size:.82rem;color:var(--text-dim);margin-bottom:.75rem;line-height:1.5;">${c.description}</p>
+        ${c.solved
+          ? `<div style="font-family:var(--mono);font-size:.78rem;color:var(--accent);">✅ Solved</div>`
+          : `<form method="POST" action="/flags/submit">
+              <input type="hidden" name="challenge" value="${c.id}"/>
+              <div style="display:flex;gap:.5rem;margin-top:.5rem;">
+                <input name="flag" placeholder="FLAG{...}" autocomplete="off"
+                  style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:var(--mono);font-size:.78rem;padding:.45rem .7rem;outline:none;min-width:0;"/>
+                <button class="btn btn-primary" type="submit" style="padding:.45rem .85rem;white-space:nowrap;">Submit</button>
+              </div>
+            </form>`
+        }
+      </div>`).join('')}
+    </div>
+
+    <div class="card" style="display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;">
+      <div>
+        <span style="font-family:var(--mono);font-size:.78rem;color:var(--text-dim);">Your total score</span>
+        <div style="font-family:var(--mono);font-size:1.4rem;color:var(--accent);font-weight:700;">${userScore} <span style="font-size:.85rem;font-weight:400;">pts</span></div>
+      </div>
+      <div style="display:flex;gap:.75rem;align-items:center;">
+        <span style="font-family:var(--mono);font-size:.78rem;color:var(--text-dim);">${challenges.filter(c=>c.solved).length} / ${challenges.length} solved</span>
+        <a class="btn btn-primary" href="/scoreboard">Scoreboard →</a>
+      </div>
+    </div>
+    `}
+  </main>
+</div>
+` }) %>
